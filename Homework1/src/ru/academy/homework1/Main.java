@@ -235,5 +235,24 @@ public class Main {
         System.out.println("Нечётные: " + Arrays.toString(od));
         System.out.println("Отрицательные: " + Arrays.toString(ne));
         System.out.println("Положительные: " + Arrays.toString(po));
+
+        // -------- вызов ЗАДАНИЯ 11 --------
+        System.out.println("Горизонтальная линия:");
+        drawLine(10, '*', false);
+
+        System.out.println("Вертикальная линия:");
+        drawLine(5, '#', true);
+
+        // -------- вызов ЗАДАНИЯ 12 --------
+        int[] arr = {5, 1, 9, 3, 7};
+
+        System.out.println("Исходный массив: " + Arrays.toString(arr));
+
+        sortArray(arr, true);
+        System.out.println("Отсортирован по возрастанию: " + Arrays.toString(arr));
+
+        sortArray(arr, false);
+        System.out.println("Отсортирован по убыванию: " + Arrays.toString(arr));
+
     }
 }

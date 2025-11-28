@@ -254,5 +254,6 @@ public class Main {
         sortArray(arr, false);
         System.out.println("Отсортирован по убыванию: " + Arrays.toString(arr));
 
+
     }
 }

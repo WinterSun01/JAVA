@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Сокращатель ссылок</title>
+    <style>
+        body
+        {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: url('/images/sunrise.jpg') no-repeat center center fixed;
+            background-size: cover;
+            min-height: 100vh;
+            color: #333;
+        }
+        .container
+        {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.94);
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+        }
+        h1, h2
+        {
+            color: #1a3c5e;
+        }
+        form
+        {
+            margin: 25px 0;
+        }
+        input[type="text"]
+        {
+            width: 70%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+        button
+        {
+            padding: 12px 24px;
+            background: #1a3c5e;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover
+        {
+            background: #2c5a8a;
+        }
+        table
+        {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 30px;
+        }
+        th, td
+        {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th
+        {
+            background-color: #f0f4f8;
+            color: #1a3c5e;
+        }
+        .success { color: #27ae60; font-weight: bold; }
+        .error { color: #e74c3c; }
+        a { color: #2980b9; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Сокращатель ссылок</h1>
+
+    <div th:if="${message}" class="success" th:text="${message}"></div>
+
+    <form th:action="@{/shorten}" th:object="${urlLink}" method="post">
+        <input type="text" th:field="*{originalUrl}" placeholder="Вставьте длинную ссылку (http:// или https://)" required>
+        <button type="submit">Сократить</button>
+        <p th:if="${#fields.hasErrors('originalUrl')}" class="error" th:errors="*{originalUrl}"></p>
+    </form>
+
+    <div th:if="${shortUrl}">
+        <p>Ваша короткая ссылка: <a th:href="${shortUrl}" th:text="${shortUrl}"></a></p>
+    </div>
+
+    <h2>Сокращённые ссылки</h2>
+    <table th:if="${links.iterator().hasNext()}">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Оригинальная</th>
+            <th>Короткая</th>
+            <th>Дата</th>
+            <th>Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="link : ${links}">
+            <td th:text="${link.id}"></td>
+            <td><a th:href="${link.originalUrl}" th:text="${link.originalUrl}"></a></td>
+            <td>
+                <a th:href="@{/{shortCode}(shortCode=${link.shortCode})}"
+                   th:text="@{/{shortCode}(shortCode=${link.shortCode})}"></a>
+            </td>
+            <td th:text="${#temporals.format(link.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
+            <td style="text-align: left;">
+                <a th:href="@{/edit/{id}(id=${link.id})}"
+                   style="color: blue; display: block; margin-bottom: 6px;">✏️ Редактировать</a>
+                <a th:href="@{/delete/{id}(id=${link.id})}"
+                   onclick="return confirm('Удалить эту ссылку?')"
+                   style="color: red; display: block;">🗑️ Удалить</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <p th:unless="${links.iterator().hasNext()}">Пока нет сокращённых ссылок.</p>
+</div>
+</body>
+</html>
